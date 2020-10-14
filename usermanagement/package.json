@@ -2,13 +2,17 @@
   "name": "usermanagement",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://nicolasb2.github.io/usermanagement/",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "-": "0.0.1",
     "core-js": "^3.6.5",
+    "gh-pages": "^3.1.0",
+    "save-dev": "0.0.1-security",
     "vue": "^2.6.11"
   },
   "devDependencies": {
