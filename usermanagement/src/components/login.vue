@@ -1,14 +1,6 @@
 <template>
   <div class = "form-wrapper">
-      <div clas="text-xs-center" v-if="submitted">
-          <h2>Thanks you for your interest</h2>
-          <div class = "details text-xs-left" >
-              <p><strong>Name:</strong>{{name}}</p>
-              <p><strong>Email:</strong>{{email}}</p>
-              <p><strong>Phone:</strong>{{phone}}</p>
-          </div>
-      </div>
-      <v-form v-else v-model="valid">
+      <v-form v-model="valid">
           <v-text-field label="Name" required :rules="nameRules" v-model="name"></v-text-field>
           <v-text-field label="Email" required :rules="emailRules" v-model.lazy="email"></v-text-field>
           <v-text-field label="Phone" required :rules="phoneRules"  v-model="phone"></v-text-field>

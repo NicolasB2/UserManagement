@@ -1,13 +1,15 @@
 <template>
   <v-app>
     <v-main>
-      <login/>
+      <v-container>
+        <login/>
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import login from './components/login';
+import login from './components/Login';
 
 export default {
   name: 'App',
