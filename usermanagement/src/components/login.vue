@@ -15,7 +15,7 @@
                         :rules="passwordRule"
                         :v-model="password"
                     ></v-text-field>
-                    <v-btn to="/home" :disabled="!valid">Login</v-btn>
+                    <v-btn to="/users" :disabled="!valid">Login</v-btn>
                 </v-form>
             </v-card>
             </div>

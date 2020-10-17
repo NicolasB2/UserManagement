@@ -1,18 +1,20 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
-        <router-view></router-view>
-      </v-container>
+      <Menu/>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import Menu from './components/Menu';
 export default {
   name: 'App',
 
-  components: {},
+  components: {
+    Menu,
+  },
 
   data: () => ({
     //

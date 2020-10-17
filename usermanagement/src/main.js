@@ -3,11 +3,9 @@ import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
 
-import Home from './components/Home';
 import Login from './components/Login';
 import Dependencies from './components/Dependencies';
 import Users from './components/Users';
-import Search from './components/Search';
 
 
 const routes = [
@@ -16,20 +14,12 @@ const routes = [
     component: Login
   },
   {
-    path: '/home',
-    component: Home
-  },
-  {
     path: '/dependencies',
     component: Dependencies
   },
   {
     path: '/users',
     component: Users
-  },
-  {
-    path: '/search',
-    component: Search
   }
   
 ]
