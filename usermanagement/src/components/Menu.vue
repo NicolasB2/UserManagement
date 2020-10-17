@@ -1,6 +1,6 @@
 <template>
       <v-toolbar dark >
-        <v-toolbar-title>Desktop Menu</v-toolbar-title>
+        <v-toolbar-title>User Management</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
          <v-btn

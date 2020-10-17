@@ -3,10 +3,25 @@ import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
 
+import firebase from 'firebase';
+import 'firebase/firestore'
+
 import Login from './components/Login';
 import Dependencies from './components/Dependencies';
 import Users from './components/Users';
 
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAynqRkqrMf3OwshaaxKZOOzlidDPhl-DE",
+  authDomain: "user-management-8e6de.firebaseapp.com",
+  databaseURL: "https://user-management-8e6de.firebaseio.com",
+  projectId: "user-management-8e6de",
+  storageBucket: "user-management-8e6de.appspot.com",
+  messagingSenderId: "1016170815027",
+  appId: "1:1016170815027:web:eb7f06f9d8f757d9adcd46"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 const routes = [
   {
@@ -28,6 +43,8 @@ Vue.config.productionTip = false
 Vue.use(VueRouter);
 
 const router = new VueRouter({ routes })
+
+export const db = firebase.firestore();
 
 new Vue({
   vuetify,
