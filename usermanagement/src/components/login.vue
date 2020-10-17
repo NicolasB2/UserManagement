@@ -4,8 +4,8 @@
             <div class = "login-form" >
             <v-card elevation="10" class = "form-wrapper">
                 <v-form v-model="valid">
-                    <v-text-field prepend-icon="mdi-eye" label="Email" required :rules="emailRules" v-model.lazy="email"></v-text-field>
-                    <v-text-field prepend-icon="mdi-eye"
+                    <v-text-field prepend-icon='mdi-email' label="Email" required :rules="emailRules" v-model.lazy="email"></v-text-field>
+                    <v-text-field prepend-icon='mdi-lock'
                         autocomplete="current-password"
                         :value="password"
                         label="Enter password"
