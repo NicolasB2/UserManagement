@@ -2,21 +2,17 @@
   <v-app>
     <v-main>
       <v-container>
-        <login/>
+        <router-view></router-view>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import login from './components/Login';
-
 export default {
   name: 'App',
 
-  components: {
-    login,
-  },
+  components: {},
 
   data: () => ({
     //
