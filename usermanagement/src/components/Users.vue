@@ -55,10 +55,12 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field
+                      <v-select
                         v-model="editedItem.dependencie"
+                        :items="items"
+                        clearable
                         label="Dependencie"
-                      ></v-text-field>
+                      ></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
@@ -125,8 +127,12 @@
         { text: 'Valid until', value: 'validuntil' },
         { text: 'Dependencie', value: 'dependencie' },
         { text: 'State', value: 'state' },
-        
         { text: 'Actions', value: 'actions', sortable: false },
+      ],
+      items: [
+        'Tecnología',
+        'Administracion',
+        'Contabilidad'
       ],
       users: [],
       editedIndex: -1,
