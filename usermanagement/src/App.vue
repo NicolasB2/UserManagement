@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <Menu/>
+      <Menu v-if="isNotInLogin()" />
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -19,5 +19,11 @@ export default {
   data: () => ({
     //
   }),
+
+  methods: {
+    isNotInLogin() {
+      return this.$router.history.current["path"] !== "/";
+    }
+  },
 };
 </script>
