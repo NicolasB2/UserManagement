@@ -2,7 +2,7 @@
   <v-container>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="dependencies"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -109,7 +109,7 @@
         { text: 'State', value: 'state' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
-      desserts: [],
+      dependencies: [],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -148,18 +148,18 @@
 
     methods: {
       initialize () {
-        this.desserts = [
+        this.dependencies = [
           {
             name: 'Tecnología',
-            coodinator: 'David Erazo',
-            maxuser: 31,
+            coordinator: 'David Erazo',
+            maxusers: 31,
             location: 'Universidad ICESI',
             state: 'Activa'            
           },
           {
             name: 'Administración',
-            coodinator: 'Nicolas Biojo',
-            maxuser: 12,
+            coordinator: 'Nicolas Biojo',
+            maxusers: 12,
             location: 'Universidad ICESI',
             state: 'Activa'          
           },
@@ -167,19 +167,19 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+        this.editedIndex = this.dependencies.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+        this.editedIndex = this.dependencies.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialogDelete = true
       },
 
       deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
+        this.dependencies.splice(this.editedIndex, 1)
         this.closeDelete()
       },
 
@@ -201,9 +201,9 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          Object.assign(this.dependencies[this.editedIndex], this.editedItem)
         } else {
-          this.desserts.push(this.editedItem)
+          this.dependencies.push(this.editedItem)
         }
         this.close()
       },

@@ -2,7 +2,7 @@
   <v-container>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="users"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -128,7 +128,7 @@
         
         { text: 'Actions', value: 'actions', sortable: false },
       ],
-      desserts: [],
+      users: [],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -171,7 +171,7 @@
 
     methods: {
       initialize () {
-        this.desserts = [
+        this.users = [
           {
             name: 'David Alejandro',
             lastname: 'Erazo Ochoa',
@@ -194,19 +194,19 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+        this.editedIndex = this.users.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+        this.editedIndex = this.users.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialogDelete = true
       },
 
       deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
+        this.users.splice(this.editedIndex, 1)
         this.closeDelete()
       },
 
@@ -228,9 +228,9 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          Object.assign(this.users[this.editedIndex], this.editedItem)
         } else {
-          this.desserts.push(this.editedItem)
+          this.users.push(this.editedItem)
         }
         this.close()
       },
