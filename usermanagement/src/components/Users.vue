@@ -111,6 +111,8 @@
 
 
 <script>
+  import { db } from '../main';
+
   export default {
     data: () => ({
       dialog: false,
@@ -172,33 +174,26 @@
     },
 
     created () {
-      this.initialize()
+      this.getUsers();
     },
-
     methods: {
-      initialize () {
-        this.users = [
-          {
-            name: 'David Alejandro',
-            lastname: 'Erazo Ochoa',
-            email: 'erazo29@hotmail.com',
-            password: '***********',
-            validuntil: '20/04/2021',
-            dependencie: 'Docente',
-            state: 'Activo'            
-          },
-          {
-            name: 'Jeffrey',
-            lastname: 'Ochoa Ochoa',
-            email: 'jeffreyisGay@hotmail.com',
-            password: '***********',
-            validuntil: '20/04/2021',
-            dependencie: 'Student',
-            state: 'Activo'            
-          },
-        ]
-      },
 
+      async getUsers(){
+          try {
+            const snapshot = await db.collection('users').get();
+
+            snapshot.forEach(doc => {
+              console.log(doc.data());
+              let userData = doc.data();
+              userData.id = doc.id;
+              this.users.push(userData)
+            })
+
+          } catch (error) {
+            console.log(error);
+          }
+      },
+     
       editItem (item) {
         this.editedIndex = this.users.indexOf(item)
         this.editedItem = Object.assign({}, item)

@@ -3,7 +3,7 @@ import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
 
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import 'firebase/firestore'
 
 import Login from './components/Login';
@@ -22,6 +22,8 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+export const db = firebase.firestore();
 
 const routes = [
   {
@@ -43,8 +45,6 @@ Vue.config.productionTip = false
 Vue.use(VueRouter);
 
 const router = new VueRouter({ routes })
-
-export const db = firebase.firestore();
 
 new Vue({
   vuetify,
