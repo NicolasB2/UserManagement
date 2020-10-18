@@ -9,6 +9,7 @@ import 'firebase/firestore'
 import Login from './components/Login';
 import Dependencies from './components/Dependencies';
 import Users from './components/Users';
+import RegisterAdmin from './components/RegisterAdmin'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -37,6 +38,10 @@ const routes = [
   {
     path: '/users',
     component: Users
+  },
+  {
+    path: '/register',
+    component: RegisterAdmin
   }
   
 ]
