@@ -113,6 +113,7 @@ export default {
     dependencies: [],
     editedIndex: -1,
     editedItem: {
+      id: '',
       name: "",
       coordinator: "",
       maxusers: 0,
@@ -120,6 +121,7 @@ export default {
       state: "",
     },
     defaultItem: {
+      id: '',
       name: "",
       coordinator: "",
       maxusers: 0,
@@ -157,27 +159,51 @@ export default {
           let dependencieData = doc.data();
           dependencieData.id = doc.id;
           this.dependencies.push(dependencieData);
-        });
+        })
+
       } catch (error) {
         console.log(error);
       }
     },
 
-    editItem(item) {
-      this.editedIndex = this.dependencies.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+    async save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.dependencies[this.editedIndex], this.editedItem);
+      } else {
+
+        try {
+          await db.collection('dependencies').add(this.editedItem);
+          this.dependencies.push(this.editedItem);
+        } catch (error) {
+          console.log(error);
+        }
+
+      }
+      this.close();
     },
 
+    async deleteItemConfirm() {
+
+      try {
+        await db.collection('dependencies').doc(this.dependencies[this.editedIndex].id).delete();
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.dependencies.splice(this.editedIndex, 1);
+      this.closeDelete();
+    },
+    
     deleteItem(item) {
       this.editedIndex = this.dependencies.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
-      this.dependencies.splice(this.editedIndex, 1);
-      this.closeDelete();
+    editItem(item) {
+      this.editedIndex = this.dependencies.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
 
     close() {
@@ -194,16 +220,6 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-    },
-
-    async save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.dependencies[this.editedIndex], this.editedItem);
-      } else {
-        await db.collection('dependencies').add(this.editedItem);
-        this.dependencies.push(this.editedItem);
-      }
-      this.close();
     },
   },
 };
