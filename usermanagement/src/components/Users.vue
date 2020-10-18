@@ -183,7 +183,6 @@
             const snapshot = await db.collection('users').get();
 
             snapshot.forEach(doc => {
-              console.log(doc.data());
               let userData = doc.data();
               userData.id = doc.id;
               this.users.push(userData)

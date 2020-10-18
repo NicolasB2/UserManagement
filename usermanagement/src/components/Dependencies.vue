@@ -1,10 +1,6 @@
 <template>
   <v-container>
-    <v-data-table
-      :headers="headers"
-      :items="dependencies"
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="dependencies" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title> Dependencies </v-toolbar-title>
@@ -60,8 +56,12 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Add dependencie </v-btn>
+                <v-btn color="blue darken-1" text @click="close">
+                  Cancel
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="save">
+                  Add dependencie
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -83,7 +83,7 @@
             </v-card>
           </v-dialog>
         </v-toolbar>
-      </template> 
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -97,121 +97,134 @@
 
 
 <script>
-  export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
-        { text: 'Name', align: 'start', sortable: false, value: 'name'},
-        { text: 'Coordinator', value: 'coordinator' },
-        { text: 'Maximun number of users', value: 'maxusers' },
-        { text: 'Location', value: 'location' },
-        { text: 'State', value: 'state' },
-        { text: 'Actions', value: 'actions', sortable: false },
-      ],
-      dependencies: [],
-      editedIndex: -1,
-      editedItem: {
-        name: '',
-        coordinator: '',
-        maxusers: 0,
-        location: '',
-        state: ''
-      },
-      defaultItem: {
-        name: '',
-        coordinator: '',
-        maxusers: 0,
-        location: '',
-        state: ''
-      },
-    }),
+import { db } from "../main";
+export default {
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      { text: "Name", align: "start", sortable: false, value: "name" },
+      { text: "Coordinator", value: "coordinator" },
+      { text: "Maximun number of users", value: "maxusers" },
+      { text: "Location", value: "location" },
+      { text: "State", value: "state" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    dependencies: [],
+    editedIndex: -1,
+    editedItem: {
+      name: "",
+      coordinator: "",
+      maxusers: 0,
+      location: "",
+      state: "",
+    },
+    defaultItem: {
+      name: "",
+      coordinator: "",
+      maxusers: 0,
+      location: "",
+      state: "",
+    },
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Add Dependencie' : 'Edit Dependencie'
-      },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "Add Dependencie" : "Edit Dependencie";
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
+  created() {
+    this.getDependecies();
+  },
+
+  methods: {
+    async getDependecies() {
+      try {
+        const snapshot = await db.collection("dependencies").get();
+
+        snapshot.forEach((doc) => {
+          let dependencieData = doc.data();
+          dependencieData.id = doc.id;
+          this.dependencies.push(dependencieData);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    initialize() {
+      this.dependencies = [
+        {
+          name: "Tecnología",
+          coordinator: "David Erazo",
+          maxusers: 31,
+          location: "Universidad ICESI",
+          state: "Activa",
+        },
+        {
+          name: "Administración",
+          coordinator: "Nicolas Biojo",
+          maxusers: 12,
+          location: "Universidad ICESI",
+          state: "Activa",
+        },
+      ];
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
+    editItem(item) {
+      this.editedIndex = this.dependencies.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
 
-    created () {
-      this.initialize()
+    deleteItem(item) {
+      this.editedIndex = this.dependencies.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
     },
 
-    methods: {
-      initialize () {
-        this.dependencies = [
-          {
-            name: 'Tecnología',
-            coordinator: 'David Erazo',
-            maxusers: 31,
-            location: 'Universidad ICESI',
-            state: 'Activa'            
-          },
-          {
-            name: 'Administración',
-            coordinator: 'Nicolas Biojo',
-            maxusers: 12,
-            location: 'Universidad ICESI',
-            state: 'Activa'          
-          },
-        ]
-      },
-
-      editItem (item) {
-        this.editedIndex = this.dependencies.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        this.editedIndex = this.dependencies.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
-
-      deleteItemConfirm () {
-        this.dependencies.splice(this.editedIndex, 1)
-        this.closeDelete()
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.dependencies[this.editedIndex], this.editedItem)
-        } else {
-          this.dependencies.push(this.editedItem)
-        }
-        this.close()
-      },
+    deleteItemConfirm() {
+      this.dependencies.splice(this.editedIndex, 1);
+      this.closeDelete();
     },
-  }
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.dependencies[this.editedIndex], this.editedItem);
+      } else {
+        this.dependencies.push(this.editedItem);
+      }
+      this.close();
+    },
+  },
+};
 </script>
 
 
 <style>
-
 </style>
