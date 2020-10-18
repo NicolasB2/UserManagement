@@ -103,7 +103,7 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
+        <v-btn color="primary" @click="getUsers"> Reset </v-btn>
       </template>
     </v-data-table>
   </v-container>
@@ -226,10 +226,11 @@
         })
       },
 
-      save () {
+      async save () {
         if (this.editedIndex > -1) {
           Object.assign(this.users[this.editedIndex], this.editedItem)
         } else {
+          await db.collection('users').add(this.editedItem);
           this.users.push(this.editedItem)
         }
         this.close()

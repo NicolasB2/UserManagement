@@ -34,7 +34,7 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.maxuser"
+                        v-model="editedItem.maxusers"
                         label="Maximun number of users"
                       ></v-text-field>
                     </v-col>
@@ -89,7 +89,7 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
+        <v-btn color="primary" @click="getDependecies"> Reset </v-btn>
       </template>
     </v-data-table>
   </v-container>
@@ -148,6 +148,7 @@ export default {
   },
 
   methods: {
+
     async getDependecies() {
       try {
         const snapshot = await db.collection("dependencies").get();
@@ -160,24 +161,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-    initialize() {
-      this.dependencies = [
-        {
-          name: "Tecnología",
-          coordinator: "David Erazo",
-          maxusers: 31,
-          location: "Universidad ICESI",
-          state: "Activa",
-        },
-        {
-          name: "Administración",
-          coordinator: "Nicolas Biojo",
-          maxusers: 12,
-          location: "Universidad ICESI",
-          state: "Activa",
-        },
-      ];
     },
 
     editItem(item) {
@@ -213,10 +196,11 @@ export default {
       });
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.dependencies[this.editedIndex], this.editedItem);
       } else {
+        await db.collection('dependencies').add(this.editedItem);
         this.dependencies.push(this.editedItem);
       }
       this.close();
