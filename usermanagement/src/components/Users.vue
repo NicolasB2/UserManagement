@@ -205,7 +205,16 @@ export default {
       try {
 
         if (this.editedIndex > -1) {
-          Object.assign(this.users[this.editedIndex], this.editedItem);
+            await db.collection("users").doc(this.editedItem.id).update({
+              id: this.editedItem.id,
+              name: this.editedItem.name,
+              lastname: this.editedItem.lastname,
+              email: this.editedItem.email,
+              password: this.editedItem.password,
+              validuntil: this.editedItem.validuntil,
+              dependencie: this.editedItem.dependencie,
+              state: this.editedItem.state,
+          });
         } else {
           await db.collection("users").add(this.editedItem);
           this.getUsers();

@@ -168,8 +168,14 @@ export default {
       try {
         
         if (this.editedIndex > -1) {
-          
-          Object.assign(this.dependencies[this.editedIndex], this.editedItem);
+          await db.collection("dependencies").doc(this.editedItem.id).update({
+            id: this.editedItem.id,
+            name: this.editedItem.name,
+            coordinator: this.editedItem.coordinator,
+            maxusers: this.editedItem.maxusers,
+            location: this.editedItem.location,
+            state: this.editedItem.state,
+          });
           this.getDependecies();
 
         } else {
