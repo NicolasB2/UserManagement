@@ -205,6 +205,7 @@ export default {
       try {
 
         if (this.editedIndex > -1) {
+
             await db.collection("users").doc(this.editedItem.id).update({
               id: this.editedItem.id,
               name: this.editedItem.name,
@@ -215,10 +216,11 @@ export default {
               dependencie: this.editedItem.dependencie,
               state: this.editedItem.state,
           });
+
         } else {
           await db.collection("users").add(this.editedItem);
-          this.getUsers();
         }
+        this.getUsers();
 
       } catch (error) {
         console.log(error);

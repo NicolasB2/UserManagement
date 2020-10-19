@@ -158,6 +158,7 @@ export default {
         snapshot.forEach((doc) => {
           let dependencieData = doc.data();
           dependencieData.id = doc.id;
+          this.dependencies.push(dependencieData);
         });
       } catch (error) {
         console.log(error);
@@ -168,6 +169,7 @@ export default {
       try {
         
         if (this.editedIndex > -1) {
+          
           await db.collection("dependencies").doc(this.editedItem.id).update({
             id: this.editedItem.id,
             name: this.editedItem.name,
@@ -176,12 +178,14 @@ export default {
             location: this.editedItem.location,
             state: this.editedItem.state,
           });
-          this.getDependecies();
 
         } else {
           await db.collection("dependencies").add(this.editedItem);
           this.dependencies.push(this.editedItem);
+          
         }
+
+        this.getDependecies();
        
       } catch (error) {
         console.log(error);
