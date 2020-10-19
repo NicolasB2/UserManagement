@@ -1,10 +1,6 @@
 <template>
   <v-container>
-    <v-data-table
-      :headers="headers"
-      :items="users"
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="users" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title> Users </v-toolbar-title>
@@ -74,8 +70,12 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Add user </v-btn>
+                <v-btn color="blue darken-1" text @click="close">
+                  Cancel
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="save">
+                  Add user
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -111,147 +111,152 @@
 
 
 <script>
-  import { db } from '../main';
+import { db } from "../main";
 
-  export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
-        { text: 'Name',
-          align: 'start',
-          sortable: false,
-          value: 'name',
-        },
-        { text: 'Last Name', value: 'lastname' },
-        { text: 'Email', value: 'email' },
-        { text: 'Password', value: 'password' },
-        { text: 'Valid until', value: 'validuntil' },
-        { text: 'Dependencie', value: 'dependencie' },
-        { text: 'State', value: 'state' },
-        { text: 'Actions', value: 'actions', sortable: false },
-      ],
-      items: [
-        'Tecnología',
-        'Administracion',
-        'Contabilidad'
-      ],
-      users: [],
-      editedIndex: -1,
-      editedItem: {
-        id: '',
-        name: '',
-        lastname: '',
-        email: '',
-        password: '',
-        validuntil: '',
-        dependencie: '',
-        state: ''
-      },
-      defaultItem: {
-        id: '',
-        name: '',
-        lastname: '',
-        email: '',
-        password: '',
-        validuntil: '',
-        dependencie: '',
-        state: ''
-      },
-    }),
+export default {
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      { text: "Name", align: "start", sortable: false, value: "name" },
+      { text: "Last Name", value: "lastname" },
+      { text: "Email", value: "email" },
+      { text: "Password", value: "password" },
+      { text: "Valid until", value: "validuntil" },
+      { text: "Dependencie", value: "dependencie" },
+      { text: "State", value: "state" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    items: [],
+    users: [],
+    editedIndex: -1,
+    editedItem: {
+      id: "",
+      name: "",
+      lastname: "",
+      email: "",
+      password: "",
+      validuntil: "",
+      dependencie: "",
+      state: "",
+    },
+    defaultItem: {
+      id: "",
+      name: "",
+      lastname: "",
+      email: "",
+      password: "",
+      validuntil: "",
+      dependencie: "",
+      state: "",
+    },
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Add User' : 'Edit User'
-      },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "Add User" : "Edit User";
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
+  created() {
+    this.getUsers();
+    this.getDependecies();
+  },
+
+  methods: {
+    async getDependecies() {
+      try {
+        const snapshot = await db.collection("dependencies").get();
+
+        snapshot.forEach((doc) => {
+          let dependencieData = doc.data();
+          this.items.push(dependencieData.name);
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
+    async getUsers() {
+      try {
+        const snapshot = await db.collection("users").get();
+
+        snapshot.forEach((doc) => {
+          let userData = doc.data();
+          userData.id = doc.id;
+          this.users.push(userData);
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    created () {
-      this.getUsers();
-    },
-    methods: {
-
-      async getUsers(){
-          try {
-            const snapshot = await db.collection('users').get();
-
-            snapshot.forEach(doc => {
-              let userData = doc.data();
-              userData.id = doc.id;
-              this.users.push(userData)
-            })
-
-          } catch (error) {
-            console.log(error);
-          }
-      },
-     
-      async save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.users[this.editedIndex], this.editedItem)
-        } else {
-
-          try {
-            await db.collection('users').add(this.editedItem);
-            this.users.push(this.editedItem)
-          } catch (error) {
-            console.log(error);
-          }
-
-        }
-        this.close()
-      },
-
-      async deleteItemConfirm () {
-
+    async save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.users[this.editedIndex], this.editedItem);
+      } else {
         try {
-          await db.collection('users').doc(this.users[this.editedIndex].id).delete();
+          await db.collection("users").add(this.editedItem);
+          this.users.push(this.editedItem);
         } catch (error) {
           console.log(error);
         }
-
-        this.users.splice(this.editedIndex, 1)
-        this.closeDelete()
-      },
-
-      deleteItem (item) {
-        this.editedIndex = this.users.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
-
-      editItem (item) {
-        this.editedIndex = this.users.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
+      }
+      this.close();
     },
-  }
+
+    async deleteItemConfirm() {
+      try {
+        await db
+          .collection("users")
+          .doc(this.users[this.editedIndex].id)
+          .delete();
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.users.splice(this.editedIndex, 1);
+      this.closeDelete();
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.users.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    editItem(item) {
+      this.editedIndex = this.users.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+  },
+};
 </script>
 
 
