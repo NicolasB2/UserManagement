@@ -6,34 +6,20 @@
         <v-form>
           <v-text-field
             v-model="name"
-            :error-messages="nameErrors"
-            :counter="10"
             label="Name"
-            required
-            @input="$v.name.$touch()"
-            @blur="$v.name.$touch()"
           ></v-text-field>
           <v-text-field
             v-model="lastname"
-            :error-messages="lastnameErrors"
             label="Last name"
-            required
-            @input="$v.lastname.$touch()"
-            @blur="$v.lastname.$touch()"
           ></v-text-field>
           <v-text-field
             v-model="email"
-            :error-messages="emailErrors"
             label="E-mail"
-            required
-            @input="$v.email.$touch()"
-            @blur="$v.email.$touch()"
+            :rules="emailRules"
           ></v-text-field>
           <v-text-field
             v-model="password"
-            :error-messages="passwordErrors"
             label="Password"
-            required
             :rules="passwordRule"
           ></v-text-field>
           
@@ -77,36 +63,28 @@
       lastname: '',
       email: '',
       password: '',
+      
       passwordRule: [
         (Password) => !!Password || "Password is required",
         (Password) => Password.length >=7 || "Password is too short"
-      ]
+      ],
+      
+      emailRules: [ 
+        (email) => !!email || "Email is required",
+        (email) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email) || "Email is invalid",
+      ],
+
+      rules: {
+        required: value => !!value || "Required.",
+        password: value => {
+            const pattern = /^(?=.*[a-z])/;
+            return (
+              pattern.test(value) ||
+              "Min. 8 characters with at least one capital letter, a number and a special character."
+            );
+        }
+      }
     }),
-
-    computed: {
-
-      nameErrors () {
-        const errors = []
-        if (!this.$v.name.$dirty) return errors
-        !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
-        !this.$v.name.required && errors.push('Name is required.')
-        return errors
-      },
-      lastnameErrors () {
-        const errors = []
-        if (!this.$v.lastname.$dirty) return errors
-        !this.$v.lastname.maxLength && errors.push('Last name must be at most 10 characters long')
-        !this.$v.lastname.required && errors.push('Last name is required.')
-        return errors
-      },
-      emailErrors () {
-        const errors = []
-        if (!this.$v.email.$dirty) return errors
-        !this.$v.email.email && errors.push('Must be valid e-mail')
-        !this.$v.email.required && errors.push('E-mail is required')
-        return errors
-      },
-    },
 
     methods: {
       submit () {
