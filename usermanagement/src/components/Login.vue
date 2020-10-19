@@ -16,6 +16,7 @@
                         :v-model="password"
                     ></v-text-field>
                     <v-btn to="/users" :disabled="!valid">Login</v-btn>
+                    <v-btn to="/register" > Register</v-btn>    
                 </v-form>
             </v-card>
             </div>
