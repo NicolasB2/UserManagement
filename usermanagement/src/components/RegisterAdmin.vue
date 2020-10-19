@@ -5,20 +5,22 @@
         <h2> Register </h2>
         <v-form>
           <v-text-field
-            v-model="name"
+            v-model="admin.name"
+            required
             label="Name"
           ></v-text-field>
           <v-text-field
-            v-model="lastname"
+            v-model="admin.lastname"
+            required
             label="Last name"
           ></v-text-field>
           <v-text-field
-            v-model="email"
+            v-model="admin.email"
             label="E-mail"
             :rules="emailRules"
           ></v-text-field>
           <v-text-field
-            v-model="password"
+            v-model="admin.password"
             label="Password"
             :rules="passwordRule"
           ></v-text-field>
@@ -26,8 +28,8 @@
           
           <v-btn
             class="mr-4"
-            @click="submit"
-            to="/users" 
+            @click="save"
+            router
           >
             Register
           </v-btn>
@@ -41,28 +43,19 @@
 </template>
 
 <script>
-  import { validationMixin } from 'vuelidate'
-  import { required, maxLength, email } from 'vuelidate/lib/validators'
+import { db } from "../main";
 
   export default {
-    mixins: [validationMixin],
 
-    validations: {
-      name: { required, maxLength: maxLength(10) },
-      lastname: {required, maxLength: maxLength(10)},
-      email: { required, email },
-      checkbox: {
-        checked (val) {
-          return val
-        },
-      },
-    },
 
     data: () => ({
-      name: '',
-      lastname: '',
-      email: '',
-      password: '',
+      admin: {
+        
+        name: '',
+        lastname: '',
+        email: '',
+        password: '',
+      },
       
       passwordRule: [
         (Password) => !!Password || "Password is required",
@@ -87,9 +80,12 @@
     }),
 
     methods: {
-      submit () {
-        this.$v.$touch()
+      
+      async save(){
+        console.log(this.admin.name)
+        await db.collection("admins").add(this.admin);
       },
+
       clear () {
         this.$v.$reset()
         this.name = ''
