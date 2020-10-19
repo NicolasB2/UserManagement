@@ -113,7 +113,6 @@ export default {
     dependencies: [],
     editedIndex: -1,
     editedItem: {
-      id: "",
       name: "",
       coordinator: "",
       maxusers: 0,
@@ -121,7 +120,6 @@ export default {
       state: "",
     },
     defaultItem: {
-      id: "",
       name: "",
       coordinator: "",
       maxusers: 0,
@@ -166,7 +164,7 @@ export default {
 
     async save() {
       try {
-        
+
         if (this.editedIndex > -1) {
           Object.assign(this.dependencies[this.editedIndex], this.editedItem);
         } else {

@@ -131,7 +131,6 @@ export default {
     users: [],
     editedIndex: -1,
     editedItem: {
-      id: "",
       name: "",
       lastname: "",
       email: "",
@@ -141,7 +140,6 @@ export default {
       state: "",
     },
     defaultItem: {
-      id: "",
       name: "",
       lastname: "",
       email: "",
