@@ -131,6 +131,7 @@ export default {
     users: [],
     editedIndex: -1,
     editedItem: {
+      id: "",
       name: "",
       lastname: "",
       email: "",
@@ -140,6 +141,7 @@ export default {
       state: "",
     },
     defaultItem: {
+      id: "",
       name: "",
       lastname: "",
       email: "",
@@ -205,7 +207,7 @@ export default {
           Object.assign(this.users[this.editedIndex], this.editedItem);
         } else {
           await db.collection("users").add(this.editedItem);
-          this.users.push(this.editedItem);
+          this.getUsers();
         }
 
       } catch (error) {
