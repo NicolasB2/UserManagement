@@ -188,6 +188,7 @@ export default {
 
     async getUsers() {
       try {
+        this.users = [];
         const snapshot = await db.collection("users").get();
 
         snapshot.forEach((doc) => {

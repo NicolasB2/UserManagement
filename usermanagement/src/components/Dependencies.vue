@@ -152,6 +152,7 @@ export default {
   methods: {
     async getDependecies() {
       try {
+        this.dependencies = [];
         const snapshot = await db.collection("dependencies").get();
 
         snapshot.forEach((doc) => {
