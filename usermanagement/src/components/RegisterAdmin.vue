@@ -41,7 +41,7 @@
           <v-btn
             class="mr-4"
             @click="submit"
-            to="/users"
+            to="/users" 
           >
             Register
           </v-btn>

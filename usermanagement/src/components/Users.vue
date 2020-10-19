@@ -208,8 +208,9 @@ export default {
           Object.assign(this.users[this.editedIndex], this.editedItem);
         } else {
           await db.collection("users").add(this.editedItem);
-          this.getUsers();
+          
         }
+        this.getUsers();
 
       } catch (error) {
         console.log(error);

@@ -158,6 +158,7 @@ export default {
         snapshot.forEach((doc) => {
           let dependencieData = doc.data();
           dependencieData.id = doc.id;
+          this.dependencies.push(dependencieData);
         });
       } catch (error) {
         console.log(error);
@@ -170,12 +171,15 @@ export default {
         if (this.editedIndex > -1) {
           
           Object.assign(this.dependencies[this.editedIndex], this.editedItem);
-          this.getDependecies();
+          
 
         } else {
           await db.collection("dependencies").add(this.editedItem);
           this.dependencies.push(this.editedItem);
+          
         }
+
+        this.getDependecies();
        
       } catch (error) {
         console.log(error);
