@@ -84,6 +84,7 @@ import { db } from "../main";
       async save(){
         console.log(this.admin.name)
         await db.collection("admins").add(this.admin);
+        this.$router.push('/users')
       },
 
       clear () {

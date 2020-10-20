@@ -1,7 +1,22 @@
 <template>
   <v-container>
+    <v-row>
+      <v-col cols="6" md="2">
+        <v-text-field label="User name">
+        </v-text-field>
+      </v-col>
+      <v-col cols="6" md="2">
+        <v-text-field label="Dependencie">
+        </v-text-field>
+      </v-col>
+      <v-col cols="6" md="2">
+        <v-btn color="primary" dark class="mb-2" >
+          Filter
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-data-table :headers="headers" :items="users" class="elevation-1">
-      <template v-slot:top>
+      <template v-slot:top> 
         <v-toolbar flat>
           <v-toolbar-title> Users </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
@@ -16,7 +31,6 @@
               <v-card-title>
                 <span class="headline">{{ formTitle }}</span>
               </v-card-title>
-
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -107,6 +121,7 @@
       </template>
     </v-data-table>
   </v-container>
+  
 </template>
 
 
