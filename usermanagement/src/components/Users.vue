@@ -2,15 +2,15 @@
   <v-container>
     <v-row>
       <v-col cols="6" md="2">
-        <v-text-field label="User name">
+        <v-text-field v-model="username" label="User name">
         </v-text-field>
       </v-col>
       <v-col cols="6" md="2">
-        <v-text-field label="Dependencie">
+        <v-text-field v-model="dependencie" label="Dependencie">
         </v-text-field>
       </v-col>
       <v-col cols="6" md="2">
-        <v-btn color="primary" dark class="mb-2" >
+        <v-btn color="primary" dark class="mb-2" @click="findUsersByDependencie" >
           Filter
         </v-btn>
       </v-col>
@@ -165,6 +165,8 @@ export default {
       dependencie: "",
       state: "",
     },
+    dependencie: "",
+    username: "",
   }),
 
   computed: {
@@ -256,6 +258,25 @@ export default {
 
       this.users.splice(this.editedIndex, 1);
       this.closeDelete();
+    },
+
+    async findUsersByDependencie(){
+      try {
+        
+        this.users = []; 
+        const snapshot = await db.collection("users").where("dependencie", "==", this.dependencie).get();
+        //const snapshot =  db.collection("users").where("dependencie", this.dependencie).get();
+        console.log(snapshot);
+          snapshot.forEach((doc) => {
+            let userData = doc.data();
+            userData.id = doc.id;
+            this.users.push(userData);
+          });
+        
+      } catch (error) {
+        console.log(error)
+      }
+
     },
 
     deleteItem(item) {
