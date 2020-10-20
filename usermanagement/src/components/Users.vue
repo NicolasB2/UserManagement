@@ -265,8 +265,7 @@ export default {
         
         this.users = []; 
         const snapshot = await db.collection("users").where("dependencie", "==", this.dependencie).get();
-        //const snapshot =  db.collection("users").where("dependencie", this.dependencie).get();
-        console.log(snapshot);
+
           snapshot.forEach((doc) => {
             let userData = doc.data();
             userData.id = doc.id;

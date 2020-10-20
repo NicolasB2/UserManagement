@@ -92,6 +92,9 @@
         <v-btn color="primary" @click="getDependecies"> Reset </v-btn>
       </template>
     </v-data-table>
+    <v-dialog v-model="error" max-width="400px">
+      <v-alert type="error">You can delete a dependecy with users</v-alert>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -101,6 +104,7 @@ import { db } from "../main";
 export default {
   data: () => ({
     dialog: false,
+    error: false,
     dialogDelete: false,
     headers: [
       { text: "Name", align: "start", sortable: false, value: "name" },
@@ -196,15 +200,21 @@ export default {
 
     async deleteItemConfirm() {
       try {
-        await db
-          .collection("dependencies")
-          .doc(this.dependencies[this.editedIndex].id)
-          .delete();
+
+        const snapshot = await db.collection("users").where("dependencie", "==", this.dependencies[this.editedIndex].name).get();
+        const size = snapshot.size;
+
+        if(size > 0){
+          this.error = true;
+        }else{
+          await db.collection("dependencies").doc(this.dependencies[this.editedIndex].id).delete();
+          this.dependencies.splice(this.editedIndex, 1);
+        }
+
       } catch (error) {
         console.log(error);
       }
 
-      this.dependencies.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
