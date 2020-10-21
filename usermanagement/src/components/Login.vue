@@ -13,9 +13,9 @@
                         @click:append="() => (value = !value)"
                         :type="value ? 'password' : 'text'"
                         :rules="passwordRule"
-                        :v-model="password"
+                        v-model="password"
                     ></v-text-field>
-                    <v-btn to="/users" :disabled="!valid">Login</v-btn>
+                    <v-btn  :disabled="!valid" @click="verifyAdmin" router>Login</v-btn>
                     <v-btn to="/register" > Register</v-btn>    
                 </v-form>
             </v-card>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { db } from "../main";
 
 export default {
 
@@ -54,7 +55,27 @@ export default {
                 }
             }
         }
+    },
+
+    methods: {
+
+        async verifyAdmin(){
+            
+            const snapshot = await db.collection("admins").where("email", "==", this.email).get();
+            
+            snapshot.forEach((doc) => {
+               let adminData = doc.data();  
+               if(adminData.password===this.password){
+                    this.$router.push('/users')
+                } 
+            });
+
+        }
+
+
+
     }
+
 }
 </script>
 
