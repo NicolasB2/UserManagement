@@ -82,11 +82,55 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+
+          <v-dialog v-model="dialogInfo">
+            <v-card>
+              <v-card-title class="headline">
+                Dependencie details
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <label > Name: {{dependecieView.name}} </label>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <label> Coordinator: {{dependecieView.coordinator}}</label>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <label> Maximun number of users: {{dependecieView.maxusers}} </label>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <label > Location: {{dependecieView.location}}</label>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <label > State: {{dependecieView.state}}</label>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <label > Users </label>
+                      <ul >
+                         <li v-for="user in users" :key="user.id">
+                            {{user.name}} {{user.lastname}}
+                         </li>
+                      </ul>
+                      
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+
+            </v-card>
+          </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      </template>
+      <template v-slot:item.plus="{ item }">
+        <v-icon small class="mr-2" @click="infoItem(item)"> Details </v-icon>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="getDependecies"> Reset </v-btn>
@@ -106,6 +150,7 @@ export default {
     dialog: false,
     error: false,
     dialogDelete: false,
+    dialogInfo: false,
     headers: [
       { text: "Name", align: "start", sortable: false, value: "name" },
       { text: "Coordinator", value: "coordinator" },
@@ -113,6 +158,7 @@ export default {
       { text: "Location", value: "location" },
       { text: "State", value: "state" },
       { text: "Actions", value: "actions", sortable: false },
+      { text: "Plus", value: "plus"}
     ],
     dependencies: [],
     editedIndex: -1,
@@ -132,6 +178,15 @@ export default {
       location: "",
       state: "",
     },
+    dependecieView: {
+      id: "",
+      name: "",
+      coordinator: "",
+      maxusers: 0,
+      location: "",
+      state: "",
+    },
+    users: [],
   }),
 
   computed: {
@@ -218,6 +273,8 @@ export default {
       this.closeDelete();
     },
 
+
+
     deleteItem(item) {
       this.editedIndex = this.dependencies.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -228,6 +285,30 @@ export default {
       this.editedIndex = this.dependencies.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+    },
+
+    async infoItem(item){
+      
+      this.dependecieView.id = item.id;
+      this.dependecieView.name = item.name;
+      this.dependecieView.coordinator = item.coordinator;
+      this.dependecieView.maxusers = item.maxusers;
+      this.dependecieView.location = item.location;
+      this.dependecieView.state = item.state;
+      this.findUsersByDependencie()
+      this.dialogInfo = true;
+    },
+
+    async findUsersByDependencie(){
+      this.users = [];
+      const snapshot = await db.collection("users").where("dependencie", "==", this.dependecieView.name).get();
+      
+      snapshot.forEach((doc) => {
+          let userData = doc.data();
+          userData.id = doc.id;
+          this.users.push(userData);
+      });
+
     },
 
     close() {
