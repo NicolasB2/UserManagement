@@ -61,11 +61,16 @@ export default {
 
         async verifyAdmin(){
             
+            var CryptoJS = require("crypto-js");
             const snapshot = await db.collection("admins").where("email", "==", this.email).get();
             
             snapshot.forEach((doc) => {
-               let adminData = doc.data();  
-               if(adminData.password===this.password){
+
+                let adminData = doc.data();  
+                var bytes  = CryptoJS.AES.decrypt(adminData.password, 'secret key 123');
+                var originalText = bytes.toString(CryptoJS.enc.Utf8);
+                
+                if(originalText===this.password){
                     this.$router.push('/users')
                 } 
             });

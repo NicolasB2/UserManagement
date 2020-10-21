@@ -84,7 +84,7 @@
         var CryptoJS = require("crypto-js");
 
         // Encrypt
-        var ciphertext = CryptoJS.AES.encrypt('my message', 'secret key 123').toString();
+        var ciphertext = CryptoJS.AES.encrypt(this.admin.password, 'secret key 123').toString();
 
         await db.collection("admins").add({
           name: this.admin.name,
@@ -92,7 +92,7 @@
           email: this.admin.name,
           password: ciphertext,
         });
-        
+
         this.$router.push('/users')
       },
       clear () {
