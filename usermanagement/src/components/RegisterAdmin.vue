@@ -43,14 +43,13 @@
 </template>
 
 <script>
-import { db } from "../main";
+  import { db } from "../main";
 
   export default {
 
 
     data: () => ({
       admin: {
-        
         name: '',
         lastname: '',
         email: '',
@@ -80,13 +79,22 @@ import { db } from "../main";
     }),
 
     methods: {
-      
       async save(){
-        console.log(this.admin.name)
-        await db.collection("admins").add(this.admin);
+
+        var CryptoJS = require("crypto-js");
+
+        // Encrypt
+        var ciphertext = CryptoJS.AES.encrypt('my message', 'secret key 123').toString();
+
+        await db.collection("admins").add({
+          name: this.admin.name,
+          lastname: this.admin.name,
+          email: this.admin.name,
+          password: ciphertext,
+        });
+        
         this.$router.push('/users')
       },
-
       clear () {
         this.$v.$reset()
         this.name = ''
