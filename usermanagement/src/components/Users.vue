@@ -226,21 +226,32 @@ export default {
     async save() {
       try {
 
-        if (this.editedIndex > -1) {
+        var CryptoJS = require("crypto-js");
+        var ciphertext = CryptoJS.AES.encrypt(this.editedItem.password, 'secret key 123').toString();
 
-            await db.collection("users").doc(this.editedItem.id).update({
+        if (this.editedIndex > -1) {
+              await db.collection("users").doc(this.editedItem.id).update({
               id: this.editedItem.id,
               name: this.editedItem.name,
               lastname: this.editedItem.lastname,
               email: this.editedItem.email,
-              password: this.editedItem.password,
+              password: ciphertext,
               validuntil: this.editedItem.validuntil,
               dependencie: this.editedItem.dependencie,
               state: this.editedItem.state,
           });
 
         } else {
-          await db.collection("users").add(this.editedItem);
+          await db.collection("users").add({
+              id: this.editedItem.id,
+              name: this.editedItem.name,
+              lastname: this.editedItem.lastname,
+              email: this.editedItem.email,
+              password: ciphertext,
+              validuntil: this.editedItem.validuntil,
+              dependencie: this.editedItem.dependencie,
+              state: this.editedItem.state,
+          });
         }
         this.getUsers();
 
