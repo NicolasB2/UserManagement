@@ -2,26 +2,29 @@
   <v-container>
     <v-row>
       <v-col cols="6" md="2">
-        <v-text-field v-model="username" label="User name">
-        </v-text-field>
+        <v-text-field v-model="username" label="User name"> </v-text-field>
       </v-col>
       <v-col cols="6" md="2">
-        <v-btn color="primary" dark class="mb-2" @click="findUserByName" >
+        <v-btn color="primary" dark class="mb-2" @click="findUserByName">
           Filter by Name
         </v-btn>
       </v-col>
       <v-col cols="6" md="2">
-        <v-text-field v-model="dependencie" label="Dependencie">
-        </v-text-field>
+        <v-text-field v-model="dependencie" label="Dependencie"> </v-text-field>
       </v-col>
       <v-col cols="6" md="2">
-        <v-btn color="primary" dark class="mb-2" @click="findUsersByDependencie" >
+        <v-btn
+          color="primary"
+          dark
+          class="mb-2"
+          @click="findUsersByDependencie"
+        >
           Filter by Dependencie
         </v-btn>
       </v-col>
     </v-row>
     <v-data-table :headers="headers" :items="users" class="elevation-1">
-      <template v-slot:top> 
+      <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title> Users </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
@@ -78,10 +81,11 @@
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field
+                      <h4> State</h4>
+                      <v-checkbox
                         v-model="editedItem.state"
-                        label="State"
-                      ></v-text-field>
+                        :label="`Active`"
+                      ></v-checkbox>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -126,7 +130,6 @@
       </template>
     </v-data-table>
   </v-container>
-  
 </template>
 
 
@@ -158,7 +161,7 @@ export default {
       password: "",
       validuntil: "",
       dependencie: "",
-      state: "",
+      state: true,
     },
     defaultItem: {
       id: "",
@@ -168,7 +171,7 @@ export default {
       password: "",
       validuntil: "",
       dependencie: "",
-      state: "",
+      state: true,
     },
     dependencie: "",
     username: "",
@@ -225,36 +228,36 @@ export default {
 
     async save() {
       try {
-
         var CryptoJS = require("crypto-js");
-        var ciphertext = CryptoJS.AES.encrypt(this.editedItem.password, 'secret key 123').toString();
+        var ciphertext = CryptoJS.AES.encrypt(
+          this.editedItem.password,
+          "secret key 123"
+        ).toString();
 
         if (this.editedIndex > -1) {
-              await db.collection("users").doc(this.editedItem.id).update({
-              id: this.editedItem.id,
-              name: this.editedItem.name,
-              lastname: this.editedItem.lastname,
-              email: this.editedItem.email,
-              password: ciphertext,
-              validuntil: this.editedItem.validuntil,
-              dependencie: this.editedItem.dependencie,
-              state: this.editedItem.state,
+          await db.collection("users").doc(this.editedItem.id).update({
+            id: this.editedItem.id,
+            name: this.editedItem.name,
+            lastname: this.editedItem.lastname,
+            email: this.editedItem.email,
+            password: ciphertext,
+            validuntil: this.editedItem.validuntil,
+            dependencie: this.editedItem.dependencie,
+            state: this.editedItem.state,
           });
-
         } else {
           await db.collection("users").add({
-              id: this.editedItem.id,
-              name: this.editedItem.name,
-              lastname: this.editedItem.lastname,
-              email: this.editedItem.email,
-              password: ciphertext,
-              validuntil: this.editedItem.validuntil,
-              dependencie: this.editedItem.dependencie,
-              state: this.editedItem.state,
+            id: this.editedItem.id,
+            name: this.editedItem.name,
+            lastname: this.editedItem.lastname,
+            email: this.editedItem.email,
+            password: ciphertext,
+            validuntil: this.editedItem.validuntil,
+            dependencie: this.editedItem.dependencie,
+            state: this.editedItem.state,
           });
         }
         this.getUsers();
-
       } catch (error) {
         console.log(error);
       }
@@ -276,37 +279,39 @@ export default {
       this.closeDelete();
     },
 
-    async findUsersByDependencie(){
+    async findUsersByDependencie() {
       try {
-        
-        this.users = []; 
-        const snapshot = await db.collection("users").where("dependencie", "==", this.dependencie).get();
+        this.users = [];
+        const snapshot = await db
+          .collection("users")
+          .where("dependencie", "==", this.dependencie)
+          .get();
 
-          snapshot.forEach((doc) => {
-            let userData = doc.data();
-            userData.id = doc.id;
-            this.users.push(userData);
-          });
-        
+        snapshot.forEach((doc) => {
+          let userData = doc.data();
+          userData.id = doc.id;
+          this.users.push(userData);
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-
     },
 
-    async findUserByName(){
+    async findUserByName() {
       try {
-        this.users = []; 
-        const snapshot = await db.collection("users").where("name", "==", this.username).get();
-        
-          snapshot.forEach((doc) => {
-            let userData = doc.data();
-            userData.id = doc.id;
-            this.users.push(userData);
-          });
-        
+        this.users = [];
+        const snapshot = await db
+          .collection("users")
+          .where("name", "==", this.username)
+          .get();
+
+        snapshot.forEach((doc) => {
+          let userData = doc.data();
+          userData.id = doc.id;
+          this.users.push(userData);
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
 
