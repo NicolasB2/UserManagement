@@ -4,7 +4,7 @@
 ### Nicolas Biojo Bermeo A00137580<br>
 ### David Alejandro Erazo A00130528<br><br>
 
-Página Web: https://david1999erazo.github.io
+Página Web: https://nicolasb2.github.io/usermanagement/#/
 
 User Managemnt System es un sistema que permite la gestión de usuarios agrupados en dependencias, a través de la visualización, asignación y actualización de los datos. <br>
 
