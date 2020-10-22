@@ -19,6 +19,9 @@
                     <v-btn to="/register" > Register</v-btn>    
                 </v-form>
             </v-card>
+            <v-dialog v-model="error" max-width="400px">
+                <v-alert type="error">The user email or password is incorrect</v-alert>
+            </v-dialog>
             </div>
         </v-flex>
     </div>
@@ -31,6 +34,7 @@ export default {
 
     data(){
         return{
+            error: false,
             email:"",
             password: "",
             value: true,
@@ -64,6 +68,10 @@ export default {
             var CryptoJS = require("crypto-js");
             const snapshot = await db.collection("admins").where("email", "==", this.email).get();
             
+            if(snapshot.size==0){
+                 this.error = true;
+            }
+
             snapshot.forEach((doc) => {
 
                 let adminData = doc.data();  
@@ -72,7 +80,9 @@ export default {
                 
                 if(originalText===this.password){
                     this.$router.push('/users')
-                } 
+                }else{
+                    this.error = true;
+                }
             });
 
         }
