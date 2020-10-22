@@ -317,8 +317,12 @@ export default {
     },
 
     editItem(item) {
+      var CryptoJS = require("crypto-js");
       this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      var bytes  = CryptoJS.AES.decrypt(this.editedItem.password, 'secret key 123');
+      var originalText = bytes.toString(CryptoJS.enc.Utf8);
+      this.editedItem.password = originalText;
       this.dialog = true;
     },
 
