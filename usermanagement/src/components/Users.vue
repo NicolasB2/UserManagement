@@ -62,8 +62,14 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
+                        autocomplete="current-password"
+                        :value="editedItem.password"
+                        label="Enter password"
+                        :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="() => (value = !value)"
+                        :type="value ? 'password' : 'text'"
+                        :rules="passwordRule"
                         v-model="editedItem.password"
-                        label="Password"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -177,8 +183,23 @@ export default {
       (email) => !!email || "Email is required",
       (email) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email) || "Email is invalid",
     ],
+    passwordRule: [ 
+      (Password) => !!Password || "password is required",
+      (Password) => Password.length >=7 || "Password is too short",
+    ],
     dependencie: "",
     username: "",
+    value: true,
+    rules: {
+        required: value => !!value || "Required.",
+        password: value => {
+            const pattern = /^(?=.*[a-z])/;
+            return (
+              pattern.test(value) ||
+              "Min. 8 characters with at least one capital letter, a number and a special character."
+            );
+        }
+    }
   }),
 
   computed: {

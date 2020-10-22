@@ -20,9 +20,14 @@
             :rules="emailRules"
           ></v-text-field>
           <v-text-field
-            v-model="admin.password"
-            label="Password"
-            :rules="passwordRule"
+                        autocomplete="current-password"
+                        :value="admin.password"
+                        label="Enter password"
+                        :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="() => (value = !value)"
+                        :type="value ? 'password' : 'text'"
+                        :rules="passwordRule"
+                        v-model="admin.password"
           ></v-text-field>
           
           
@@ -55,17 +60,15 @@
         email: '',
         password: '',
       },
-      
-      passwordRule: [
-        (Password) => !!Password || "Password is required",
-        (Password) => Password.length >=7 || "Password is too short"
+      passwordRule: [ 
+        (Password) => !!Password || "password is required",
+        (Password) => Password.length >=7 || "Password is too short",
       ],
-      
       emailRules: [ 
         (email) => !!email || "Email is required",
         (email) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email) || "Email is invalid",
       ],
-
+      value: true,
       rules: {
         required: value => !!value || "Required.",
         password: value => {
@@ -88,8 +91,8 @@
 
         await db.collection("admins").add({
           name: this.admin.name,
-          lastname: this.admin.name,
-          email: this.admin.name,
+          lastname: this.admin.lastname,
+          email: this.admin.email,
           password: ciphertext,
         });
 
