@@ -55,7 +55,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field
+                      <v-text-field required :rules="emailRules"
                         v-model="editedItem.email"
                         label="Email"
                       ></v-text-field>
@@ -173,6 +173,10 @@ export default {
       dependencie: "",
       state: true,
     },
+    emailRules: [ 
+      (email) => !!email || "Email is required",
+      (email) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email) || "Email is invalid",
+    ],
     dependencie: "",
     username: "",
   }),
